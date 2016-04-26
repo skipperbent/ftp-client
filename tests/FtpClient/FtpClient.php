@@ -6,9 +6,9 @@ use Pecee\FtpClient\FtpException;
 class FtpClient extends \PHPUnit_Framework_TestCase
 {
 
-    protected $ftpHost = 'ftp.k.dk';
-    protected $ftpUsername = 'editorial';
-    protected $ftpPassword = 'Vimmel47';
+    protected $ftpHost = 'ftp.test.dk';
+    protected $ftpUsername = 'username';
+    protected $ftpPassword = 'password';
     protected $testDirectory = 'upload/tmp';
     protected $dirThatExists = 'upload/tmp';
     protected $dirWithMultipleFiles = 'upload/tmp';
