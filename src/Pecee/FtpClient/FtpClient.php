@@ -151,7 +151,7 @@ class FtpClient implements \Countable
      * @param string $password
      *
      * @throws FtpException
-     * @return FTPClient If the login is incorrect
+     * @return static
      */
     public function login($username = 'anonymous', $password = '')
     {
@@ -188,7 +188,7 @@ class FtpClient implements \Countable
      * Changes to the parent directory
      *
      * @throws FtpException
-     * @return FTPClient
+     * @return static
      */
     public function up()
     {
@@ -302,7 +302,7 @@ class FtpClient implements \Countable
      *
      * @param  string $directory The directory
      * @param  bool   $recursive
-     * @return array
+     * @return bool
      * @throws FtpException
      */
     public function createDirectory($directory, $recursive = false)
@@ -762,6 +762,10 @@ class FtpClient implements \Countable
      */
     public function __call($function, array $arguments)
     {
+        if(method_exists($this, $function)) {
+            return call_user_func_array(array($this, $function), $arguments);
+        }
+
         $function = 'ftp_' . $function;
         if (function_exists($function)) {
             array_unshift($arguments, $this->connection);

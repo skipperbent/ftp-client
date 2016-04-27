@@ -11,10 +11,10 @@ class FtpClient extends \PHPUnit_Framework_TestCase
     protected $ftpPassword = 'password';
     protected $testDirectory = 'upload/tmp';
     protected $dirThatExists = 'upload/tmp';
-    protected $dirWithMultipleFiles = 'upload/tmp';
+    protected $dirWithMultipleFiles = 'upload/dialog';
 
     public function testWrongLogin() {
-        $this->setExpectedException(FtpException::class);
+        $this->expectException(FtpException::class);
 
         $ftpClient = new \Pecee\FtpClient\FtpClient();
         $ftpClient->connect($this->ftpHost);
@@ -26,21 +26,21 @@ class FtpClient extends \PHPUnit_Framework_TestCase
     }
 
     public function testNonExistingDir() {
-        $this->setExpectedException(FtpException::class);
+        $this->expectException(FtpException::class);
         $ftpClient = $this->getClient();
-        $ftpClient->scanDir('nonExisting');
+        $ftpClient->getFilesList('nonExisting');
     }
 
     public function testListDir() {
         $ftpClient = $this->getClient();
-        $dir = $ftpClient->scanDir();
+        $dir = $ftpClient->getFilesList($this->dirWithMultipleFiles);
 
         $this->assertGreaterThan(0, count($dir));
     }
 
     public function testUploadFile() {
         $ftpClient = $this->getClient();
-        $result = $ftpClient->uploadFile(__DIR__ . DIRECTORY_SEPARATOR . 'file_to_upload.gif', $this->testDirectory . '/test.gif', FTP_ASCII);
+        $result = $ftpClient->uploadFile(__DIR__ . DIRECTORY_SEPARATOR . 'file_to_upload.gif', $this->testDirectory . '/test.gif');
         $this->assertTrue(($result !== false));
     }
 
@@ -58,7 +58,7 @@ class FtpClient extends \PHPUnit_Framework_TestCase
     }
 
     public function testDirectoryAlreadyExists() {
-        $this->setExpectedException(FtpException::class);
+        $this->expectException(FtpException::class);
         $ftpClient = $this->getClient();
         $ftpClient->createDirectory($this->testDirectory . '/test_dir');
     }
