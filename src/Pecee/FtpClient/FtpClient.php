@@ -762,7 +762,6 @@ class FtpClient implements \Countable
      */
     public function __call($function, array $arguments)
     {
-
         if(method_exists($this, $function)) {
             return call_user_func_array(array($this, $function), $arguments);
         }
