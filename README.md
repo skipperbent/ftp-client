@@ -74,10 +74,10 @@ Detailed list of all files and directories:
 
 ```php
 // scan the current directory and returns the details of each item
-$items = $ftp->scanDir();
+$items = $ftp->scanDirectory();
 
 // scan the current directory (recursive) and returns the details of each item
-var_dump($ftp->scanDir('.', true));
+var_dump($ftp->scanDirectory('.', true));
 ```
 
 Result:

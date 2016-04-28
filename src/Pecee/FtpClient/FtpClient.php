@@ -1,13 +1,7 @@
 <?php
 /*
- * This file is part of the `nicolab/php-ftp-client` package.
- *
- * (c) Nicolas Tallefourtane <dev@nicolab.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @copyright Nicolas Tallefourtane http://nicolab.net
+ * @author Simon Sessingø
+ * @author Nicolas Tallefourtane
  */
 namespace Pecee\FtpClient;
 
@@ -346,12 +340,7 @@ class FtpClient implements \Countable
         }
 
         if ($recursive) {
-            $files = $this->getFilesList($directory, false, 'rsort');
-
-            // remove children
-            foreach ($files as $file) {
-                $this->delete($file, true);
-            }
+            $this->cleanDirectory($directory);
         }
 
         // remove the directory
@@ -372,7 +361,7 @@ class FtpClient implements \Countable
 
         // remove children
         foreach ($files as $file) {
-            $this->deleteFile($file, true);
+            $this->deleteFile($file);
         }
 
         return $this->isEmpty($directory);
@@ -428,7 +417,7 @@ class FtpClient implements \Countable
      * @param  bool   $recursive
      * @return array
      */
-    public function scanDir($directory = '.', $recursive = false)
+    public function scanDirectory($directory = '.', $recursive = false)
     {
         return $this->parseList($this->getList($directory, $recursive));
     }
@@ -442,7 +431,7 @@ class FtpClient implements \Countable
      */
     public function getDirectorySize($directory = '.', $recursive = true)
     {
-        $items = $this->scanDir($directory, $recursive);
+        $items = $this->scanDirectory($directory, $recursive);
         $size  = 0;
 
         foreach ($items as $item) {
@@ -462,7 +451,7 @@ class FtpClient implements \Countable
     public function count($directory = '.', $type = null, $recursive = true)
     {
         $items  = (null === $type ? $this->getFilesList($directory, $recursive)
-            : $this->scanDir($directory, $recursive));
+            : $this->scanDirectory($directory, $recursive));
 
         $count = 0;
         foreach ($items as $item) {
@@ -725,7 +714,7 @@ class FtpClient implements \Countable
      * @throws FtpException
      * @return string The file type (file, directory, link, unknown)
      */
-    public function rawToType($permission)
+    protected function rawToType($permission)
     {
         if (!is_string($permission)) {
             throw new FtpException('The "$permission" argument must be a string, "'
